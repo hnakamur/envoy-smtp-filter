@@ -1,4 +1,4 @@
-# Default example setup to demo a Network Filter
+# Default example setup to demo SMTP Filter
 
 ## Files
 
@@ -15,34 +15,38 @@
 #### Listeners
 
 * [0.0.0.0:10000](http://0.0.0.0:10000) - represents a TCP ingress
-  * dispatches all requests to a `mock HTTP endpoint` (see below)
-  * configured to use `Network Filter` extension
-* [127.0.0.1:10001](http://127.0.0.1:10001) - represents a `mock HTTP endpoint`
-  * responds to all HTTP requests with HTTP status `200`
+  * proxies traffic to a `SMTP Server` (you need to run it yourself)
+  * configured to use `SMTP Filter` extension
 
 ### Extension config
 
-Empty by default
+To see detailed stats per SMTP verb and reply code, use
+
+```json
+{
+    "detailed_stats": true
+}
+```
 
 ## Request Flow
 
 ```
-+--------+                +----------------------+              +----------------------------+
-|        |   (requests)   | Envoy (TCP ingress)  | (dispatches) | Envoy (mock HTTP endpoint) |
-| client | -------------> |                      | -----------> |                            |
-|        |                | http://0.0.0.0:10000 |              |   http://127.0.0.1:10001   |
-+--------+                +----------------------+              +----------------------------+
-                                    | (uses)
-                                    V
-                         +------------------------+
-                         |  Network Filter (Wasm) |
-                         +------------------------+
++-------------+                  +----------------------+              +---------------------------+
+|             |  (SMTP session)  | Envoy (SMTP Filter)  | (dispatches) |        SMTP Server        |
+| SMTP client | ---------------> |                      | -----------> |                           |
+|             |                  | http://0.0.0.0:10000 |              |   http://127.0.0.1:1025   |
++-------------+                  +----------------------+              +---------------------------+
+                                           | (uses)
+                                           V
+                                +------------------------+
+                                |    SMTP Filter (Wasm)  |
+                                +------------------------+
 ```
 
 ## How to use
 
-1. Make HTTP request
-   ```shell
-   curl http://0.0.0.0:10000
-   ```
-2. Checkout `Envoy` stdout
+1. Setup SMTP server on `127.0.0.1:1025`
+   * E.g., use https://github.com/maildev/maildev
+2. Setup SMTP client
+   * E.g., a Java application with `log4j` configured to log to SMTP
+3. Checkout `Envoy` stats
