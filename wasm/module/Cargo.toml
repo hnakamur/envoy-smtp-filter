@@ -1,0 +1,17 @@
+[package]
+name = "envoy-smtp-filter-module"
+description = "Envoy SMTP filter (Wasm module)"
+version = "0.1.0"
+edition = "2018"
+keywords = ["envoy", "extension", "wasm", "network-filter", "smtp"]
+categories = ["wasm"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+name = "extension"
+crate-type = ["cdylib"]
+
+[dependencies]
+envoy-smtp-filter = { path = "../.." }
+envoy = { package = "envoy-sdk", version = "^0.1" }
