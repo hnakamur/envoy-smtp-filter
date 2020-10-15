@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="DEBUG">
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+
+        <SMTP name="mail"
+              subject="Exception in Java code"
+              from="from@HOME"
+              to="to@WORLD"
+              smtpHost="127.0.0.1"
+              smtpPort="10000"
+              bufferSize="100">
+        </SMTP>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="console"/>
+        </Root>
+
+        <Logger name="io.tetratelabs.examples" level="error" additivity="false">
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="mail"/>
+        </Logger>
+    </Loggers>
+</Configuration>

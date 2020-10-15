@@ -22,7 +22,7 @@ use super::config::SmtpFilterConfig;
 use super::filter::SmtpFilter;
 use super::stats::SmtpFilterStats;
 
-/// Factory for creating STMP Filter instances
+/// Factory for creating SMTP Filter instances
 /// (one filter instance per TCP connection).
 pub struct SmtpFilterFactory<'a> {
     // Stats API implementation.

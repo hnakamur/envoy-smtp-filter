@@ -2,6 +2,14 @@
 
 ## How To
 
+### How To install GetEnvoy CLI
+
+```shell
+curl -L https://getenvoy.io/cli | bash -s -- -b /usr/local/bin
+```
+
+For more information see https://www.getenvoy.io/install/
+
 ### How To Build
 
 ```shell
@@ -16,6 +24,22 @@ getenvoy extension test
 
 ### How to Run example Envoy setup
 
+#### Start SMTP server
+
+```shell
+docker run -p 1080:80 -p 1025:25 djfarrelly/maildev
+```
+
+which will start https://github.com/maildev/maildev SMTP server
+
+#### Start SMTP client (log4j)
+
+```shell
+sh -c 'cd examples/log-by-mail && ./mvnw compile exec:java'
+```
+
+#### Start Envoy w/ SMTP filter
+
 ```shell
 getenvoy extension run
 ```
@@ -23,6 +47,10 @@ getenvoy extension run
 And then follow instructions at [./.getenvoy/extension/examples/default/README.md](./.getenvoy/extension/examples/default/README.md)
 
 ### Example metrics
+
+```shell
+curl -s localhost:9901/stats | grep smtp
+```
 
 ```shell
 smtp.command.DATA.replies.positive.total: 22
